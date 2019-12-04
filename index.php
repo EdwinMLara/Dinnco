@@ -60,12 +60,12 @@
                         ?>
                 </div>
                 <div class="row">
-                    <button onclick="actualizar_estado_base_datos('1','1');">Prueba</button>
                 </div>    
             </div>
             <div class="col-md-6 calendar" id="calendar"></div>
     	</div>
     </div>
+    <?php require_once("footer.php"); ?>
 </body>
 <script src="js/jQuery.js"></script>
 <script src="js/bootstrap.min.js"></script>

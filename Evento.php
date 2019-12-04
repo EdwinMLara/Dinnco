@@ -7,11 +7,9 @@
 		public $color;
 		public $rendering;
 
-		function __construct($id_evento,$id_lampara,$fecha_start,$fecha_end,$color){
-			$this->id_evento = $id_evento;
+		function __construct($id_lampara,$fecha_start,$color){
 			$this->title = $id_lampara;
 			$this->start = $fecha_start;
-			$this->fecha_end = $fecha_end;
 			$this->color = $color;
 			$this->rendering = "background";
 		}

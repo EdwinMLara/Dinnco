@@ -19,6 +19,7 @@ function actualizar_estado_base_datos(status,id){
     url:url_string,
     success: function(lampara){
         var status = lampara.status;
+        console.log("La actualizacion fue",status);
     }
   });
 }
@@ -91,43 +92,47 @@ function current_status_lamparas(){
         for(var i=0;i<lamparas.length;i++){
           var id = lamparas[i].id_lampara;
           var status_lampara = lamparas[i].status_lampara;
-          console.log(id,status_lampara);
           actulizar_status_bottons(id,status_lampara);
         }
     }
   });
 }
 
-function insertar_eliminar_evento(fecha,id_lampara,tag_ejecucion,id_evento){
+function insertar_eliminar_evento(fecha,id_lampara,tag_ejecucion){
   $.ajax({
     type:"Get",
     dataType:"json",
     url:"insertar_eliminar_evento.php",
-    success: function(datos){
-
+    data:{fecha: fecha, id_lampara: id_lampara,tag_ejecucion: tag_ejecucion},
+    success: function(mensaje){
+        var status = mensaje.status;
+        console.log("Se eliminino o se inserto", status);
     }
   });
 }
 
-$(document).ready(function() {
-  var aux_events = $.ajax({
+function obtener_eventos_ajax(){
+  return $.ajax({
           dataType:"json",
           url:"obtener_eventos.php",
           global:false, /*revisar estas instrucciones global async*/
           async:false,
           success:function(datos){
-             aux_events = datos.Eventos;
+             var aux_events = datos;
              return aux_events;
           }
   }).responseText;
+}
 
-  aux_events = JSON.parse(aux_events);
-  aux_events = aux_events.Eventos;
-  console.log(aux_events);
 
-  var calendarEl = document.getElementById('calendar');
+var calendarEl = document.getElementById('calendar');
+var eventos;
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+$(document).ready(function() {
+    eventos = JSON.parse(obtener_eventos_ajax());
+    console.log(eventos);
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid', 'timeGrid'],
       header: {
         left: 'prev,next',
@@ -138,10 +143,28 @@ $(document).ready(function() {
       contentHeight: 350,
       editable: false,
       dateClick:function(info){
-        alert(info.dateStr);
+        var bandera = true;
+        var fecha = info.dateStr;
+        for (var i = 0; i<eventos.length; i++) {
+          var fecha_evento = eventos[i].start 
+          if(!fecha.localeCompare(fecha_evento)){
+            insertar_eliminar_evento(fecha,1,'eliminar');
+            bandera = false;
+            break;
+          }
+        }
+        if(bandera){
+          insertar_eliminar_evento(fecha,1,'insertar');
+        }
+         location.reload();
       },
-      events: aux_events    
-      
+      events:{
+        url: './obtener_eventos.php',
+        method:'POST',
+        failure: function(){
+          alert("Error al cargar eventos");
+        }
+      }
     });
 
     calendar.render();

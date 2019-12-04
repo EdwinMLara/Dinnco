@@ -35,3 +35,10 @@ nav div ul li a {
     font-weight: bold;
 }
 
+#footer{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+}
+
