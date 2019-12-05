@@ -15,60 +15,23 @@
 		<div class="row">
 			<div class="col-md-5">
 				<h4>Agregar Dispositivo</h4><br>
-				<form autocomplete="off" action="agregar_estacion.php">
+				<form autocomplete="off" action="agregar_estacion.php" method="post">
 					<div class="form-group">
-						<label for="exampleInputEmail1">Nombre de la estación</label>
+						<label>Nombre de la estación</label>
 					    <input type="text" class="form-control" id="Nombre" name="Nombre" placeholder="Nombre de la estación">
-					    <small id="emailHelp" class="form-text text-muted">Nombre descriptivo del lugar donde se instala el dispositivo.</small>
+					    <small class="form-text text-muted">Nombre descriptivo del lugar donde se instala el dispositivo.</small>
 					</div>
 					<div class="form-group">
-					    <label for="exampleInputPassword1">Direccion IP</label>
-					    <input type="text" class="form-control" id="Direccion" placeholder="Direccion IP">
+					    <label>Direccion IP</label>
+					    <input type="text" class="form-control" id="direccion" name="ip_address" placeholder="Direccion IP">
 					</div>
-					<button type="submit" class="btn btn-primary">Agregar</button>
+					<button type="Submit" class="btn btn-primary">Agregar</button>
 				</form>
 			</div>
 			<div class="col-md-7">
-				<h3>Dispositivos Registrados</h3>
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th>Identificador</th>
-							<th>Descripción</th>
-							<th>Dirección ip</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						 	require_once("conexion.php");
-						 	if($con){
-						 		$sql = "SELECT * FROM lamparas";
-						 		$sql_array = mysqli_query($con,$sql);
-						 		$num_rows = 0;
-
-						 		while($lampara = mysqli_fetch_array($sql_array)){
-						 			$id_lampara = $lampara["id_lampara"];
-						 			$descripcion = $lampara["Descripcion"];
-						 			$direccion_ip = $lampara["ip_address"];
-						 			$num_rows += 1;
-						 			?>
-						 			<tr>
-										<td><?php echo $id_lampara; ?></td>
-										<td><?php echo $descripcion; ?></td>
-										<td><?php echo $direccion_ip; ?></td>
-										<th>
-											<a href="#" class="btn btn-primary btn-sm">Actualizar</a>
-											<a href="#" class="btn btn-danger btn-sm">Eliminar</a>
-										</th>
-									</tr>
-						 		<?php
-						 		$total_paginas = $num_rows/5;
-						 		}
-						 	}
-						?>
-					</tbody>
-				</table>
+				<div id="dipositivos_registrados">
+					<?php require_once("dispositivos_registrados.php"); ?>
+				</div>
 				<nav aria-label="Page navigation example">
   					<ul class="pagination justify-content-end">
 						<li class="page-item disabled">
