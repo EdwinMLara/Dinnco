@@ -133,11 +133,11 @@ $(document).ready(function() {
     console.log(eventos);
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'interaction', 'dayGrid', 'timeGrid'],
+      plugins: [ 'interaction', 'dayGrid'],
       header: {
         left: 'prev,next',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek'
+        right: 'dayGridMonth'
       },
       selectable:true,
       contentHeight: 350,
