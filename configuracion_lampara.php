@@ -32,21 +32,10 @@
 				<div id="dipositivos_registrados">
 					<?php require_once("dispositivos_registrados.php"); ?>
 				</div>
-				<nav aria-label="Page navigation example">
-  					<ul class="pagination justify-content-end">
-						<li class="page-item disabled">
-		      				<a class="page-link" href="#" tabindex="-1">Previous</a>
-		    			</li>
-		    			<?php if($total_paginas <= 1){ ?>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-		    			<?php }else{ ?>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-    							<li class="page-item"><a class="page-link" href="#">2</a></li>
-    							<li class="page-item"><a class="page-link" href="#">Next</a></li>
-		    			<?php } ?>
-		    		</ul>
-		    	</nav>
+				<?php 
+					require_once("paginador.php");
+					paginador(1,1,$total_paginas,1);
+				?>
 			</div>
 		</div>
 	</div>
