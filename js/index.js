@@ -63,6 +63,7 @@ function encender(url,response,id){
 
 function actulizar_status_bottons(id,status){
   var btn = document.getElementById("btn-".concat(id));
+  console.log("btn-".concat(id));
 
   switch(status){
     case "0":
@@ -82,11 +83,12 @@ function actulizar_status_bottons(id,status){
   }
 }
 
-function current_status_lamparas(){
+function current_status_lamparas(incio,fin){
   $.ajax({
     type:"GET",
     dataType:"json",
     url:"current_status_lamparas.php",
+    data:{incio: incio,fin: fin},
     success: function(datos){
         var lamparas = datos.Lamparas;
         for(var i=0;i<lamparas.length;i++){
@@ -169,5 +171,6 @@ $(document).ready(function() {
 
     calendar.render();
 
-    setInterval(current_status_lamparas,3000);
+    //var datos_taps = document.getElementById("Seccion");
+    setInterval(current_status_lamparas,3000,0,6);
 });

@@ -1,9 +1,11 @@
 <?php
 	require_once("conexion.php");
 	include "Lampara.php";
+	$inicio = $_GET["inicio"];
+	$fin = $_GET["fin"];
 	if($con){
 		$array = array();
-		$sql = "SELECT * FROM lamparas";
+		$sql = "SELECT * FROM lamparas LIMIT $inicio,$fin";
 		$sql_lamparas_array = mysqli_query($con,$sql);
 		while($sql_lampara = mysqli_fetch_array($sql_lamparas_array)){
 			$id_lampara = $sql_lampara["id_lampara"];

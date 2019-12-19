@@ -24,11 +24,43 @@
     	<div class="row">
     		
     		<div class="col-md-6 datos">
+                <div class="row add_padding_row">
+                    <ul class="nav nav-tabs">
+                    <?php
+                        require_once("conexion.php");
+                        if($con){
+                            $sql_total_paginas = "SELECT COUNT(*) as total FROM lamparas";
+                            $sql_result = mysqli_query($con,$sql_total_paginas);
+                            $total = mysqli_fetch_array($sql_result);
+                            $num_rows = (int) $total["total"];
+                        }
+                        $total_tabs = ceil($num_rows/5);
+
+                        for($i=1;$i<=$total_tabs;$i++){ ?>
+                            <li class="nav-item">
+                                <input id="Seccion<?php echo $i; ?>" type="hidden" value="<?php echo $i; ?>">
+                                <a class="nav-link active" href="<?php echo 'index.php?page='.$i; ?>">Sección <?php echo $i; ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div>
                 <div class="row">                  
                         <?php
-                            require_once("conexion.php");
                             if($con){
-                                $sql = "SELECT * FROM lamparas";
+                                $inicio = 0;
+                                $fin = 6;
+
+                                if(isset($_GET["page"])){
+                                    $inicio = (((int) $_GET["page"])-1)*$fin;
+                                    $fin = $inicio+$fin;
+                                    if($fin > $num_rows){
+                                        $fin_paginador = $num_rows;
+                                    }
+                                }
+
+                                $sql = "SELECT * FROM lamparas LIMIT $inicio, $fin";
+
+
                                 $lamparas = mysqli_query($con,$sql);
                                 while($lampara = mysqli_fetch_array($lamparas)){
                                     $id_lampara = $lampara["id_lampara"];
