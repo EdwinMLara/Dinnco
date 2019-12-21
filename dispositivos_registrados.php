@@ -3,7 +3,8 @@
 					<thead class="thead-dark">
 						<tr>
 							<th>Identificador</th>
-							<th>Descripción</th>
+							<th>Area</th>
+							<th>Lamparas</th>
 							<th>Dirección ip</th>
 							<th>Acciones</th>
 						</tr>
@@ -12,7 +13,7 @@
 						<?php
 						 	require_once("conexion.php");
 						 	if($con){
-						 		$sql_total_paginas = "SELECT COUNT(*) as total FROM lamparas";
+						 		$sql_total_paginas = "SELECT COUNT(*) as total FROM area";
 						 		$sql_result = mysqli_query($con,$sql_total_paginas);
 						 		$total = mysqli_fetch_array($sql_result);
 						 		$num_rows = (int) $total["total"];
@@ -27,17 +28,19 @@
 						 			}
 						 		}
 
-						 		$sql = "SELECT * FROM lamparas LIMIT $inicio_paginador,$fin_paginador";
+						 		$sql = "SELECT * FROM area LIMIT $inicio_paginador,$fin_paginador";
 						 		$sql_array = mysqli_query($con,$sql);
 
 						 		while($lampara = mysqli_fetch_array($sql_array)){
-						 			$id_lampara = $lampara["id_lampara"];
-						 			$descripcion = $lampara["Descripcion"];
-						 			$direccion_ip = $lampara["ip_address"];
+						 			$id_lampara = $lampara["id_area"];
+						 			$nombre_area = $lampara["nombre_area"];
+						 			$num_lamparas = $lampara["num_lamparas"];
+						 			$direccion_ip = $lampara["direccion_ip"];
 						 			?>
 						 			<tr>
 										<td><?php echo $id_lampara; ?></td>
-										<td><?php echo $descripcion; ?></td>
+										<td><?php echo $nombre_area; ?></td>
+										<td><?php echo $num_lamparas; ?></td>
 										<td><?php echo $direccion_ip; ?></td>
 										<th>
 											<a href="#" class="btn btn-primary btn-sm">Actualizar</a>

@@ -29,19 +29,20 @@
                     <?php
                         require_once("conexion.php");
                         if($con){
-                            $sql_total_paginas = "SELECT COUNT(*) as total FROM lamparas";
+                            $sql_total_paginas = "SELECT * FROM area";
                             $sql_result = mysqli_query($con,$sql_total_paginas);
-                            $total = mysqli_fetch_array($sql_result);
-                            $num_rows = (int) $total["total"];
-                        }
-                        $total_tabs = ceil($num_rows/5);
-
-                        for($i=1;$i<=$total_tabs;$i++){ ?>
-                            <li class="nav-item">
-                                <input id="Seccion<?php echo $i; ?>" type="hidden" value="<?php echo $i; ?>">
-                                <a class="nav-link active" href="<?php echo 'index.php?page='.$i; ?>">Sección <?php echo $i; ?></a>
-                            </li>
-                        <?php } ?>
+                            $aux_page = 1;
+                             while($area = mysqli_fetch_array($sql_result)){
+                                $nombre_area = $area["nombre_area"];?>
+                                    <li class="nav-item">
+                                        <input id="<?php echo $nombre_area; ?>" type="hidden" value="<?php echo $aux_page; ?>">
+                                        <a class="nav-link active" href="<?php echo 'index.php?area='.$aux_page; ?>"><?php echo $nombre_area; ?></a>
+                                    </li>
+                                <?php
+                                $aux_page += 1;
+                             }
+                        }?>
+                            
                     </ul>
                 </div>
                 <div class="row">                  
@@ -50,23 +51,21 @@
                                 $inicio = 0;
                                 $fin = 6;
 
-                                if(isset($_GET["page"])){
-                                    $inicio = (((int) $_GET["page"])-1)*$fin;
-                                    $fin = $inicio+$fin;
-                                    if($fin > $num_rows){
-                                        $fin_paginador = $num_rows;
-                                    }
+                                if(isset($_GET["area"])){
+                                    $id_area = $_GET["area"];
+                                }else{
+                                    $id_area = 1;
                                 }
 
-                                $sql = "SELECT * FROM lamparas LIMIT $inicio, $fin";
+                                $sql = "SELECT * FROM lamparas WHERE id_area = $id_area";
 
 
                                 $lamparas = mysqli_query($con,$sql);
                                 while($lampara = mysqli_fetch_array($lamparas)){
                                     $id_lampara = $lampara["id_lampara"];
-                                    $descripcion = $lampara["Descripcion"];
-                                    $status = $lampara["status_lampara"];
-                                    $ip_address = $lampara["ip_address"];
+                                    $descripcion = $lampara["descripcion"];
+                                    $status = $lampara["status_lamparas"];
+                                    $ip_address = $lampara["control_manual"];
 
                                     if($status == 1){
                                         $class = "btn btn-danger";
@@ -77,17 +76,15 @@
                                     } else if($status == 2){
                                         $class = "btn btn-warning disabled";
                                         $tag_btn = "Desactivado";
-                                    }
-
-                                    echo "
+                                    }?>
                                     <div class='col-md-4'>
                                         <div class='form-group'>
-                                            <label>$descripcion</label>
+                                            <label><?php echo $descripcion; ?></label>
                                         </div>
-                                        <button id='btn-$id_lampara' class='$class' onclick='encender(\"http://$ip_address\",\"response-$id_lampara\",\"$id_lampara\");'>$tag_btn</button>
-                                        <p id='response-$id_lampara'>response $id_lampara</p>
-                                    </div>";
-                                }
+                                        <button id="<?php echo 'btn-'.$id_lampara; ?>" class='<?php echo 'btn-'.$class; ?>' onclick='encender();'><?php echo $tag_btn; ?></button>
+                                        <p id='response-$id_lampara'>response <?php echo $id_lampara; ?></p>
+                                    </div>
+                                <?php }
                             }
                         ?>
                 </div>
