@@ -22,6 +22,17 @@
 					    <small class="form-text text-muted">Nombre descriptivo del lugar donde se instala el dispositivo.</small>
 					</div>
 					<div class="form-group">
+					    <label>Número de relevadores</label>
+					    <select name="num_lamparas" id="select_lamparas" class="form-control" >
+					    	<option value="1">1</option>
+					    	<option value="2">2</option>
+					    	<option value="3">3</option>
+					    	<option value="4">4</option>
+					    	<option value="6">5</option>
+					    </select>
+					    <small class="form-text text-muted">Numero de relevadores controlados por el dispositivo</small>
+					</div>
+					<div class="form-group">
 					    <label>Direccion IP</label>
 					    <input type="text" class="form-control" id="direccion" name="ip_address" placeholder="Direccion IP">
 					</div>

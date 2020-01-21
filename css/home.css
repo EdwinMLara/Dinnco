@@ -19,14 +19,17 @@ and open the template in the editor.
     
 }
 
-.calendar{
-    margin-top: 15px; 
+.calendar{ 
 	width: 100%;
+    position: relative;
+    padding-bottom: 30px;
 }
 
 .datos{
-    margin-top: 15px;
-	width: 100%;
+    position: relative;
+    height: 100%;
+	width: 100%; 
+    background: blue;
 }
 
 nav div ul li a {
@@ -35,14 +38,76 @@ nav div ul li a {
     font-weight: bold;
 }
 
-#footer{
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
+.add_padding_row{
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
-.add_padding_row{
-    padding-bottom: 15px;
+.add_padding_row_int{
+    padding-bottom: 10px;
 }
+
+.padre_botons{
+    background: orange;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.hijo_botons{
+    position: relative;
+    background: purple;
+    width: 44%;
+    height:100%;
+    margin: 10px 2.5%;
+    display: inline-block;
+}
+
+.button_recon {
+    position: relative;
+    z-index: 1;
+    height: 100px;
+    width: 90%; 
+    margin: 1% 5%;
+    background-color: #918C8C;
+    border: none;
+    border-radius: 8px;
+}
+
+.button_rebkg {
+    position: relative;
+    z-index: 1;
+    height: 100px; 
+    width: 90%;
+    margin: 1% 5%;
+    background-color: #D6CCCC;
+    border: none;
+    border-radius: 8px;
+}
+
+.button_red {
+    position: absolute;
+    z-index: 2;
+    width: 70px;
+    height: 70px;
+    top: calc(50% - 35px);
+    left: calc(50% - 35px);
+    border: none;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.button_grey{
+    position: absolute;
+    z-index: 2;
+    width: 70px;
+    height: 70px;
+    top: calc(50% - 35px);
+    left: calc(50% - 35px);
+    border: none;
+    border-radius: 50%;
+    background-color: green;
+}
+  
+
 

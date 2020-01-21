@@ -172,5 +172,21 @@ $(document).ready(function() {
     calendar.render();
 
     //var datos_taps = document.getElementById("Seccion");
-    setInterval(current_status_lamparas,3000,0,6);
+    //setInterval(current_status_lamparas,3000,0,6);
 });
+
+$( ".button_red" ).click(function() {
+  $( this ).toggleClass( "button_grey" );
+});
+
+$( ".button_recon" ).click(function() {
+  $( this ).toggleClass( "button_rebkg" );
+});
+
+function change(id) {
+    var elem = document.getElementById(id);
+    if (elem.value=="Apagado") 
+    elem.value = "Encendido";
+    else 
+    elem.value = "Apagado";
+}
