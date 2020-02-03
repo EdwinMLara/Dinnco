@@ -31,25 +31,25 @@
 						 		$sql = "SELECT * FROM area LIMIT $inicio_paginador,$fin_paginador";
 						 		$sql_array = mysqli_query($con,$sql);
 
-						 		while($lampara = mysqli_fetch_array($sql_array)){
-						 			$id_lampara = $lampara["id_area"];
-						 			$nombre_area = $lampara["nombre_area"];
-						 			$num_lamparas = $lampara["num_lamparas"];
-						 			$direccion_ip = $lampara["direccion_ip"];
+						 		while($area = mysqli_fetch_array($sql_array)){
+						 			$id_area = $area["id_area"];
+						 			$nombre_area = $area["nombre_area"];
+						 			$num_lamparas = $area["num_lamparas"];
+						 			$direccion_ip = $area["direccion_ip"];
 						 			?>
 						 			<tr>
-										<td><?php echo $id_lampara; ?></td>
+										<td><?php echo $id_area; ?></td>
 										<td><?php echo $nombre_area; ?></td>
 										<td><?php echo $num_lamparas; ?></td>
 										<td><?php echo $direccion_ip; ?></td>
 										<th>
-											<a href="#" class="btn btn-primary btn-sm">Actualizar</a>
-											<a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+											<a href="#" class="btn btn-warning btn-sm">Editar</a>
+											<a href="eliminar_area.php?area=<?php echo $id_area; ?>" class="btn btn-danger btn-sm">Eliminar</a>
 										</th>
 									</tr>
 						 		<?php
-						 		$total_paginas = ceil($num_rows/5);
-						 		}
+								}
+								$total_paginas = ceil($num_rows/5);
 						 	}
 						?>
 					</tbody>

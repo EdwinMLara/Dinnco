@@ -1,14 +1,14 @@
 <?php
 	class Evento{
 		public $id_evento;
-		public $title;
+		public $id_lampara;
 		public $start;
-		public $fecha_end;
 		public $color;
 		public $rendering;
 
-		function __construct($id_lampara,$fecha_start,$color){
-			$this->title = $id_lampara;
+		function __construct($id_evento,$id_lampara,$fecha_start,$color){
+			$this->id_evento = $id_evento;
+			$this->id_lampara = $id_lampara;
 			$this->start = $fecha_start;
 			$this->color = $color;
 			$this->rendering = "background";

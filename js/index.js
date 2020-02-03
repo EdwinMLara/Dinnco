@@ -1,15 +1,3 @@
-function change_class(id){
-  var btn = document.getElementById(id);
-  var aux = btn.innerHTML;
-  if(aux == "On"){
-    btn.className = "btn btn-danger"; 
-    btn.innerHTML = "Off";
-  }else if(aux == "Off"){
-    btn.className = "btn btn-success"; 
-    btn.innerHTML = "On";
-  }
-}
-
 function actualizar_estado_base_datos(status,id){
   var url_string = "update_status_lampara.php".concat("?status=",status,"&id_lampara=",id);
   console.log(url_string);
@@ -61,28 +49,6 @@ function encender(url,response,id){
   xhttp.send();
 }
 
-function actulizar_status_bottons(id,status){
-  var btn = document.getElementById("btn-".concat(id));
-  console.log("btn-".concat(id));
-
-  switch(status){
-    case "0":
-      btn.className = "btn btn-success";
-      btn.innerHTML = "On";
-      break;
-    case "1":
-      btn.className = "btn btn-danger";
-      btn.innerHTML = "Off";
-      break;
-    case "2":
-      btn.className = "btn btn-warning disabled";
-      btn.innerHTML = "Desactivado";
-      break;
-    default:
-      console.log("Error");
-  }
-}
-
 function current_status_lamparas(incio,fin){
   $.ajax({
     type:"GET",
@@ -113,10 +79,11 @@ function insertar_eliminar_evento(fecha,id_lampara,tag_ejecucion){
   });
 }
 
-function obtener_eventos_ajax(){
+function obtener_eventos_ajax(id_lampara){
   return $.ajax({
           dataType:"json",
           url:"obtener_eventos.php",
+          data:{id_lampara: id_lampara},
           global:false, /*revisar estas instrucciones global async*/
           async:false,
           success:function(datos){
@@ -126,67 +93,124 @@ function obtener_eventos_ajax(){
   }).responseText;
 }
 
+function ejecutar_calendario(id_lampara,id_area){
+  var aux_url;
 
-var calendarEl = document.getElementById('calendar');
-var eventos;
-
-$(document).ready(function() {
-    eventos = JSON.parse(obtener_eventos_ajax());
-    console.log(eventos);
-
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'interaction', 'dayGrid'],
-      header: {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridMonth'
-      },
-      selectable:true,
-      contentHeight: 350,
-      editable: false,
-      dateClick:function(info){
-        var bandera = true;
-        var fecha = info.dateStr;
-        for (var i = 0; i<eventos.length; i++) {
-          var fecha_evento = eventos[i].start 
-          if(!fecha.localeCompare(fecha_evento)){
-            insertar_eliminar_evento(fecha,1,'eliminar');
-            bandera = false;
-            break;
-          }
-        }
-        if(bandera){
-          insertar_eliminar_evento(fecha,1,'insertar');
-        }
-         location.reload();
-      },
-      events:{
-        url: './obtener_eventos.php',
-        method:'POST',
-        failure: function(){
-          alert("Error al cargar eventos");
+  if(id_lampara){
+     aux_url = './obtener_eventos.php?id_lampara='.concat(id_lampara);
+  }else{
+    aux_url = './obtener_eventos.php';
+  }
+  
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    plugins: [ 'interaction', 'dayGrid'],
+    header: {
+      left: 'prev,next',
+      center: 'title',
+      right: 'dayGridMonth'
+    },
+    selectable:true,
+    contentHeight: 350,
+    editable: false,
+    dateClick:function(info){
+      var bandera = true;
+      var fecha = info.dateStr;
+      for (var i = 0; i<eventos.length; i++) {
+        var fecha_evento = eventos[i].start 
+        if(!fecha.localeCompare(fecha_evento)){
+          insertar_eliminar_evento(fecha,id_lampara,'eliminar');
+          bandera = false;
+          break;
         }
       }
-    });
-
-    calendar.render();
-
-    //var datos_taps = document.getElementById("Seccion");
-    //setInterval(current_status_lamparas,3000,0,6);
-});
+      if(bandera){
+        insertar_eliminar_evento(fecha,id_lampara,'insertar');
+      }
+      var url_redir ="index.php?id_lampara="+id_lampara+"&area="+id_area; 
+      window.location.href=url_redir; 
+    },
+    events:{
+      url: aux_url,
+      method:'GET',
+      failure: function(){
+        alert("Error al cargar eventos");
+      }
+    }
+  });
+  calendarEl.innerHTML = "";
+  calendar.render();
+}
 
 $( ".button_red" ).click(function() {
   $( this ).toggleClass( "button_grey" );
 });
 
-$( ".button_recon" ).click(function() {
-  $( this ).toggleClass( "button_rebkg" );
-});
+/** se ejecutan para obtener los eventos que corresponden al id 
+ * de la lampara y el area actual  
+ */
 
-function change(id) {
-    var elem = document.getElementById(id);
-    if (elem.value=="Apagado") 
-    elem.value = "Encendido";
-    else 
-    elem.value = "Apagado";
+$( ".button_recon" ).click(function() {
+  var $this = $(this);
+  $this.toggleClass("button_rebkg");
+  var is_on = $this.hasClass("button_rebkg");
+  if(is_on){
+    var json_id = $this.attr('id');
+    ids = JSON.parse(json_id);
+    console.log(ids);
+    id_lampara = ids[1];
+    id_area = ids[0];
+    eventos = JSON.parse(obtener_eventos_ajax(id_lampara));
+    console.log(eventos);
+    $(".button_rebkg").each(function(i,object){
+      var aux_object = $(object).attr('id');
+      if(aux_object != json_id){
+        $(object).toggleClass("button_rebkg");
+      }
+    });
+    ejecutar_calendario(id_lampara,id_area);
+  }else{
+    ejecutar_calendario(0);
+  }
+});
+/** Esta funcion sirve para buscar los parametros get de la paguina */
+function buscar_parametros_get() {
+  var prmstr = window.location.search.substr(1);
+  return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
 }
+
+/** se manda llamar para convertir la cadena de parametros GET en una array */
+function transformToAssocArray( prmstr ) {
+  var params = {};
+  var prmarr = prmstr.split("&");
+  for ( var i = 0; i < prmarr.length; i++) {
+      var tmparr = prmarr[i].split("=");
+      params[tmparr[0]] = tmparr[1];
+  }
+  return params;
+}
+
+/** Variables globales*/
+var calendarEl = document.getElementById('calendar');
+var eventos;
+
+/**Al terminar de cargar la paguina se revisa si hay algun parametro GET,
+ * donde si lo hay se asignan los cambias pertinentes css
+ */
+$(document).ready(function() {
+  var params = buscar_parametros_get();
+  if(params.id_lampara){
+    ejecutar_calendario(parseInt(params.id_lampara));
+    var tag = "["+params.area+","+params.id_lampara+"]";  
+    $(".button_recon").each(function(i,object){
+      var aux_object = $(object).attr('id');
+      console.log(aux_object,tag);
+      if(aux_object == tag){
+        $(object).toggleClass("button_rebkg");
+      }
+    });
+  }else{
+    ejecutar_calendario(0);
+  }
+  //var datos_taps = document.getElementById("Seccion");
+  //setInterval(current_status_lamparas,3000,0,6);
+});

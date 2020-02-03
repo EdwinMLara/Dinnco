@@ -29,7 +29,6 @@ and open the template in the editor.
     position: relative;
     height: 100%;
 	width: 100%; 
-    background: blue;
 }
 
 nav div ul li a {
@@ -48,7 +47,6 @@ nav div ul li a {
 }
 
 .padre_botons{
-    background: orange;
     width: 100%;
     height: 100%;
     position: relative;
@@ -56,7 +54,6 @@ nav div ul li a {
 
 .hijo_botons{
     position: relative;
-    background: purple;
     width: 44%;
     height:100%;
     margin: 10px 2.5%;
@@ -107,6 +104,14 @@ nav div ul li a {
     border: none;
     border-radius: 50%;
     background-color: green;
+}
+
+.No_dispositivos{
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 50px;
 }
   
 

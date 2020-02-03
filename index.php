@@ -29,41 +29,7 @@
                 <div class="row"> 
 
                     <div class="padre_botons">
-                        <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                           
-                        </div>                        
-    
-                        <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                        
-                        </div>    
-
-                         <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                           
-                        </div>                        
-    
-                        <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                        
-                        </div>    
-
-                        <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                           
-                        </div>                        
-    
-                        <div class="hijo_botons">
-                            <button type="button" class="button_recon"></button>
-                            <input onClick="change()" type="button" class="button_red"></input>
-                        
-                        </div>                                        
+                        <?php require_once("interuptores.php"); ?>                                     
                     </div>
 
                 </div> 
@@ -77,8 +43,7 @@
                     </div>
                 </div>
             </div>         
-            <div class="col-md-6 calendar" id="calendar">
-                
+            <div class="col-md-6 calendar" id="calendar">      
             </div>
     	</div>
     </div>

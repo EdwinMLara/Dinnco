@@ -1,7 +1,8 @@
 <?php
 	if(isset($_GET["tag_ejecucion"])){
-		$fecha_start = $_GET["fecha"];
+		$fecha = $_GET["fecha"];
 		$id_lampara = $_GET["id_lampara"];
+		$color = "red";
 		
 		require_once("conexion.php");
 
@@ -12,10 +13,10 @@
 
 			switch ($tag_ejecucion) {
 				case 'insertar':
-					$sql = "INSERT INTO eventos (id_lampara, fecha_start, fecha_end, color) VALUES ('$id_lampara','$fecha_start','','red')";
+					$sql = "INSERT INTO eventos (id_lampara,fecha, color) VALUES ('$id_lampara','$fecha','$color')";
 					break;
 				case 'eliminar':
-					$sql = "DELETE FROM eventos WHERE fecha_start = '$fecha_start'";
+					$sql = "DELETE FROM eventos WHERE fecha = '$fecha'";
 					break;
 			}
 

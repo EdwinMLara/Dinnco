@@ -15,7 +15,7 @@
 		<div class="row">
 			<div class="col-md-5">
 				<h4>Agregar Dispositivo</h4><br>
-				<form autocomplete="off" action="agregar_estacion.php" method="post">
+				<form autocomplete="off" action="agregar_estacion.php" method="post" onsubmit="return validacion_datos()">
 					<div class="form-group">
 						<label>Nombre de la estación</label>
 					    <input type="text" class="form-control" id="Nombre" name="Nombre" placeholder="Nombre de la estación">
@@ -23,7 +23,7 @@
 					</div>
 					<div class="form-group">
 					    <label>Número de relevadores</label>
-					    <select name="num_lamparas" id="select_lamparas" class="form-control" >
+					    <select name="num_lamparas" id="cant_interruptores" class="form-control" >
 					    	<option value="1">1</option>
 					    	<option value="2">2</option>
 					    	<option value="3">3</option>
@@ -36,7 +36,7 @@
 					    <label>Direccion IP</label>
 					    <input type="text" class="form-control" id="direccion" name="ip_address" placeholder="Direccion IP">
 					</div>
-					<button type="Submit" class="btn btn-primary">Agregar</button>
+					<button  type="submit" class="btn btn-primary">Agregar</button>
 				</form>
 			</div>
 			<div class="col-md-7">
@@ -55,5 +55,6 @@
 	?>
 </body>
 <script src="js/jQuery.js"></script>
+<script src="js/configuracion_lampara.js"></script>
 <script src="js/bootstrap.min.js"></script>
 </html>
