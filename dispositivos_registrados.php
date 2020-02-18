@@ -2,7 +2,7 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th>Identificador</th>
+							<th>id_area</th>
 							<th>Area</th>
 							<th>Lamparas</th>
 							<th>Dirección ip</th>

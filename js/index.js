@@ -12,49 +12,12 @@ function actualizar_estado_base_datos(status,id){
   });
 }
 
-function encender(url,response,id){
-  var btn = document.getElementById("btn-".concat(id));
-  var btn_class = btn.className; 
-  console.log(btn_class);
-  if(btn_class.localeCompare("btn btn-success") == 0){
-    url = url.concat("/on");
-  }else if(btn_class.localeCompare("btn btn-danger") == 0){
-    url = url.concat("/off");
-  }
-
-  console.log(url);
-
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        var esp_response = xhttp.responseText;
-        document.getElementById(response).innerHTML = esp_response;
-        change_class("btn-".concat(id));
-        console.log(esp_response);
-        var n = esp_response.search("<p>");
-        var n2 = esp_response.search("</p>")
-
-        if(n > -1 && n2 > -1){
-          var esp_response_status = esp_response.slice(n+3,n2);
-          console.log(esp_response_status);
-          if(esp_response_status.localeCompare("on") == 0){
-            actualizar_estado_base_datos(1,id);
-          }else if(esp_response_status.localeCompare("off") == 0){
-            actualizar_estado_base_datos(0,id);
-          }
-        }
-      }
-  };  
-  xhttp.open("GET",url, true);
-  xhttp.send();
-}
-
-function current_status_lamparas(incio,fin){
+function current_status_system(id_area){
   $.ajax({
     type:"GET",
     dataType:"json",
-    url:"current_status_lamparas.php",
-    data:{incio: incio,fin: fin},
+    url:"current_status_system.php",
+    data:{id_area: id_area},
     success: function(datos){
         var lamparas = datos.Lamparas;
         for(var i=0;i<lamparas.length;i++){
@@ -65,7 +28,9 @@ function current_status_lamparas(incio,fin){
     }
   });
 }
-
+/** Se manda llamar cuando se da click en un apartado del calendario
+ * donde, se agrega o se elimina un evento si este ya existe 
+*/
 function insertar_eliminar_evento(fecha,id_lampara,tag_ejecucion){
   $.ajax({
     type:"Get",
@@ -141,8 +106,83 @@ function ejecutar_calendario(id_lampara,id_area){
   calendar.render();
 }
 
-$( ".button_red" ).click(function() {
+$("#Prueba").on('click',function(e){
+  alert("Se clickeo el botton");
+  var url
+  if($(this).hasClass("btn-warning")){
+    url = "http://192.168.0.9/control_off";
+  }else{
+    url = "http://192.168.0.9/control_on";
+  }
+
+  console.log(url);
+
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        var esp_response = xhttp.responseText;
+        document.getElementById("response").innerHTML = esp_response;
+        console.log(esp_response);
+        var n = esp_response.search("<p>");
+        var n2 = esp_response.search("</p>")
+
+        if(n > -1 && n2 > -1){
+          var esp_response_status = esp_response.slice(n+3,n2);
+          console.log(esp_response_status);
+          if(esp_response_status.localeCompare("on") == 0){
+            actualizar_estado_base_datos(1,id_lampara);
+          }else if(esp_response_status.localeCompare("off") == 0){
+            actualizar_estado_base_datos(0,id_lampara);
+          }
+        }
+      }
+    };  
+  xhttp.open("GET",url, true);
+  xhttp.send();
+
+  $(this).toggleClass("btn-warning");
+
+});
+
+$( ".button_red" ).on('click',function(e) {
+  var control_manual = $(this).data("control_manual");
+  console.log(control_manual);
+  if(control_manual){
+    alert('desative el control manual');
+  }else{
+    var direccion_ip = $(this).data("direccion_ip");
+    var id_lampara = $(this).data("id_lampara");
+    if($(this).hasClass("button_grey")){
+      var url = "http://"+direccion_ip+"/on";
+    }else{
+      var url = "http://"+direccion_ip+"/off";
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        var esp_response = xhttp.responseText;
+        document.getElementById("response").innerHTML = esp_response;
+        console.log(esp_response);
+        var n = esp_response.search("<p>");
+        var n2 = esp_response.search("</p>")
+
+        if(n > -1 && n2 > -1){
+          var esp_response_status = esp_response.slice(n+3,n2);
+          console.log(esp_response_status);
+          if(esp_response_status.localeCompare("on") == 0){
+            actualizar_estado_base_datos(1,id_lampara);
+          }else if(esp_response_status.localeCompare("off") == 0){
+            actualizar_estado_base_datos(0,id_lampara);
+          }
+        }
+      }
+    };  
+  xhttp.open("GET",url, true);
+  xhttp.send();
   $( this ).toggleClass( "button_grey" );
+  }
+  
 });
 
 /** se ejecutan para obtener los eventos que corresponden al id 
@@ -160,7 +200,6 @@ $( ".button_recon" ).click(function() {
     id_lampara = ids[1];
     id_area = ids[0];
     eventos = JSON.parse(obtener_eventos_ajax(id_lampara));
-    console.log(eventos);
     $(".button_rebkg").each(function(i,object){
       var aux_object = $(object).attr('id');
       if(aux_object != json_id){
@@ -189,6 +228,24 @@ function transformToAssocArray( prmstr ) {
   return params;
 }
 
+/**
+ * Esta función tiene como objetivo obtener el id_area de la primer
+ * area que se creo dinamicamente end la base de datos en tipo texto 
+ * la cual regresa un json
+ */
+function obtener_primer_area(){
+  return $.ajax({
+    dataType:"json",
+    url:"obtener_primer_area.php",
+    global:false, /*revisar estas instrucciones global async*/
+    async:false,
+    success:function(datos){
+       var aux_events = datos;
+       return aux_events;
+    }
+}).responseText;
+}
+
 /** Variables globales*/
 var calendarEl = document.getElementById('calendar');
 var eventos;
@@ -203,7 +260,6 @@ $(document).ready(function() {
     var tag = "["+params.area+","+params.id_lampara+"]";  
     $(".button_recon").each(function(i,object){
       var aux_object = $(object).attr('id');
-      console.log(aux_object,tag);
       if(aux_object == tag){
         $(object).toggleClass("button_rebkg");
       }
@@ -211,6 +267,17 @@ $(document).ready(function() {
   }else{
     ejecutar_calendario(0);
   }
-  //var datos_taps = document.getElementById("Seccion");
-  //setInterval(current_status_lamparas,3000,0,6);
+
+  /**
+   * Este if sirve para revisar si hay parametros de area pasado por GET,
+   * pero en caso de no ser asi se obtiene el ultimo id generado dinamicamente en la
+   * base de datos llamando la funcion obtener primer area
+   */
+  if(params.id_area){
+    setInterval(current_status_system,3000,params.id_area);
+  }else{
+
+  }
+
+  
 });

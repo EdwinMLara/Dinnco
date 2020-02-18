@@ -20,7 +20,7 @@
     <?php
         require_once("navbar.php");
     ?>
-    <div class="container ">
+    <div id="main_container" class="container">
     	<div class="row add_padding_row">		
     		<div class="col-md-6 datos">
                 <div class="row">
@@ -36,9 +36,14 @@
                 <div class="row add_padding_row_int">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-center">
-                            <div class="p-2 bg-warning">
-                                Control Manual Desactivado
+                            <div class="p-2">
+                                <button type="button" id="Prueba" class="btn btn-success"> Control Manual Desactivado </button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p id="response"></p>
                         </div>
                     </div>
                 </div>
