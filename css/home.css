@@ -87,7 +87,7 @@ nav div ul li a {
     z-index: 2;
     width: 70px;
     height: 70px;
-    top: calc(50% - 35px);
+    top: calc(50% - 35px + 24px);
     left: calc(50% - 35px);
     border: none;
     border-radius: 50%;
@@ -99,7 +99,7 @@ nav div ul li a {
     z-index: 2;
     width: 70px;
     height: 70px;
-    top: calc(50% - 35px);
+    top: calc(50% - 35px  + 24px);
     left: calc(50% - 35px);
     border: none;
     border-radius: 50%;

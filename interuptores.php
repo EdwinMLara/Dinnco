@@ -16,13 +16,25 @@
     $sql_count_result = mysqli_query($con,$sql_count);
     while($interuptor = mysqli_fetch_array($sql_count_result)){
         $id_lampara = $interuptor["id_lampara"];
+        $descripcion = $interuptor["descripcion"];
         $status_lampara = $interuptor["status_lamparas"];
         $control_manual = $interuptor["control_manual"];
         $direccion_ip = $interuptor["direccion_ip"];
         $array = array(intval($id_area),intval($id_lampara));
         ?>
         <div class="hijo_botons">
-            <button type="button" id='<?php echo json_encode($array); ?>' class="button_recon"></button>
+            <div class="row">
+            <div class="col-md-12">
+                <div id="<?php echo $descripcion; ?>" class="d-flex justify-content-center">
+                    <div class="p-2">
+                        <?php echo $descripcion; ?>
+                    </div>
+                </div> 
+            </div>    
+            </div>
+            <div class="row">
+                <button type="button" id='<?php echo json_encode($array); ?>' class="button_recon"></button>
+            </div>
         <?php
         if($status_lampara){ ?>  
             <input id="input_<?php echo $id_lampara; ?>" type="button" class="button_red" data-direccion_ip="<?php echo $direccion_ip; ?>" data-id_lampara="<?php echo $id_lampara; ?>" data-control_manual="<?php echo $control_manual; ?>"></input>

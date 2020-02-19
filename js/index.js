@@ -12,6 +12,19 @@ function actualizar_estado_base_datos(status,id){
   });
 }
 
+/**
+ * Esta función sirve para remover la clase button gray
+ * la cual sera ejecutarda por la funcion current_status_system periodicamente
+ * @param {*} id 
+ * @param {*} status 
+ */
+function actualizar_status_bottons(id,status){
+ var aux_id = "#input_"+id;
+ if(status){
+   $(aux_id).removeClass("button_grey");
+ }
+}
+
 function current_status_system(id_area){
   $.ajax({
     type:"GET",
@@ -23,7 +36,7 @@ function current_status_system(id_area){
         for(var i=0;i<lamparas.length;i++){
           var id = lamparas[i].id_lampara;
           var status_lampara = lamparas[i].status_lampara;
-          actulizar_status_bottons(id,status_lampara);
+          actualizar_status_bottons(id,status_lampara);
         }
     }
   });
@@ -106,8 +119,35 @@ function ejecutar_calendario(id_lampara,id_area){
   calendar.render();
 }
 
+function hacer_peticion_http(url){
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      var esp_response = xhttp.responseText;
+      document.getElementById("response").innerHTML = esp_response;
+      console.log(esp_response);
+      var n = esp_response.search("<p>");
+      var n2 = esp_response.search("</p>")
+
+      if(n > -1 && n2 > -1){
+        var esp_response_status = esp_response.slice(n+3,n2);
+        console.log(esp_response_status);
+        if(esp_response_status.localeCompare("on") == 0){
+          actualizar_estado_base_datos(1,id_lampara);
+        }else if(esp_response_status.localeCompare("off") == 0){
+          actualizar_estado_base_datos(0,id_lampara);
+        }
+      }
+    }
+  };  
+
+  xhttp.open("GET",url, true);
+  xhttp.send();
+
+}
+
 $("#Prueba").on('click',function(e){
-  alert("Se clickeo el botton");
   var url
   if($(this).hasClass("btn-warning")){
     url = "http://192.168.0.9/control_off";
@@ -116,30 +156,7 @@ $("#Prueba").on('click',function(e){
   }
 
   console.log(url);
-
-  var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        var esp_response = xhttp.responseText;
-        document.getElementById("response").innerHTML = esp_response;
-        console.log(esp_response);
-        var n = esp_response.search("<p>");
-        var n2 = esp_response.search("</p>")
-
-        if(n > -1 && n2 > -1){
-          var esp_response_status = esp_response.slice(n+3,n2);
-          console.log(esp_response_status);
-          if(esp_response_status.localeCompare("on") == 0){
-            actualizar_estado_base_datos(1,id_lampara);
-          }else if(esp_response_status.localeCompare("off") == 0){
-            actualizar_estado_base_datos(0,id_lampara);
-          }
-        }
-      }
-    };  
-  xhttp.open("GET",url, true);
-  xhttp.send();
-
+  hacer_peticion_http(url);
   $(this).toggleClass("btn-warning");
 
 });
@@ -157,30 +174,8 @@ $( ".button_red" ).on('click',function(e) {
     }else{
       var url = "http://"+direccion_ip+"/off";
     }
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        var esp_response = xhttp.responseText;
-        document.getElementById("response").innerHTML = esp_response;
-        console.log(esp_response);
-        var n = esp_response.search("<p>");
-        var n2 = esp_response.search("</p>")
-
-        if(n > -1 && n2 > -1){
-          var esp_response_status = esp_response.slice(n+3,n2);
-          console.log(esp_response_status);
-          if(esp_response_status.localeCompare("on") == 0){
-            actualizar_estado_base_datos(1,id_lampara);
-          }else if(esp_response_status.localeCompare("off") == 0){
-            actualizar_estado_base_datos(0,id_lampara);
-          }
-        }
-      }
-    };  
-  xhttp.open("GET",url, true);
-  xhttp.send();
-  $( this ).toggleClass( "button_grey" );
+    hacer_peticion_http(url);
+    $( this ).toggleClass( "button_grey" );
   }
   
 });
