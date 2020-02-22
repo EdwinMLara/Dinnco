@@ -1,14 +1,18 @@
 <?php
  	class Lampara {
- 		public $id_lampara;
+		public $id_lampara;
+		public $descripcion;
  		public $status_lampara;
 		public $control_manual;
+
 		public $eventos = array(); 
 
- 		function __construct($id_lampara,$status_lampara,$control_manual,$eventos){
- 			$this->id_lampara = $id_lampara;
+ 		function __construct($id_lampara,$descripcion,$status_lampara,$control_manual,$eventos){
+			$this->id_lampara = $id_lampara;
+			$this->descripcion = $descripcion;
  			$this->status_lampara = $status_lampara;
 			$this->control_manual = $control_manual;
+			
 			$this->eventos =  $eventos;
  		}
 

@@ -21,18 +21,20 @@
         require_once("navbar.php");
     ?>
     <div id="main_container" class="container">
-    	<div class="row add_padding_row">		
+    	<div id="sistema" class="row add_padding_row">
+
     		<div class="col-md-6 datos">
+
                 <div class="row">
                     <?php require_once("tabs.php"); ?>
                 </div>
-                <div class="row"> 
 
+                <div id="botones" class="row"> 
                     <div class="padre_botons">
                         <?php require_once("interuptores.php"); ?>                                     
                     </div>
-
                 </div> 
+
                 <div class="row add_padding_row_int">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-center">
@@ -47,9 +49,12 @@
                         </div>
                     </div>
                 </div>
-            </div>         
+
+            </div>
+
             <div class="col-md-6 calendar" id="calendar">      
             </div>
+
     	</div>
     </div>
 </body>

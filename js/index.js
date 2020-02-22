@@ -32,11 +32,11 @@ function current_status_system(id_area){
     url:"current_status_system.php",
     data:{id_area: id_area},
     success: function(datos){
-        var lamparas = datos.Lamparas;
-        for(var i=0;i<lamparas.length;i++){
-          var id = lamparas[i].id_lampara;
-          var status_lampara = lamparas[i].status_lampara;
-          actualizar_status_bottons(id,status_lampara);
+        var Area = datos;
+        if(parseInt(Area.control_manual)){
+          $("#sistema").addClass("div_disable");
+        }else{
+          console.log("continuamos");
         }
     }
   });
@@ -238,7 +238,7 @@ function obtener_primer_area(){
        var aux_events = datos;
        return aux_events;
     }
-}).responseText;
+  }).responseText;
 }
 
 /** Variables globales*/
@@ -271,7 +271,10 @@ $(document).ready(function() {
   if(params.id_area){
     setInterval(current_status_system,3000,params.id_area);
   }else{
-
+    var text_id_area = obtener_primer_area();
+    var id_area_json = JSON.parse(text_id_area);
+    var id_area = id_area_json.id_area;
+    setInterval(current_status_system,3000,id_area);
   }
 
   
