@@ -12,13 +12,13 @@
             $id_area = "0";
         }
     }
-    $sql_count = "SELECT * FROM lamparas INNER JOIN area ON area.id_area = lamparas.id_area WHERE lamparas.id_area = $id_area";
+    $sql_count = "SELECT lamparas.id_lampara, lamparas.descripcion, lamparas.status_lamparas, lamparas.control_manual as control_manual_lampara, area.direccion_ip FROM lamparas INNER JOIN area ON area.id_area = lamparas.id_area WHERE lamparas.id_area = $id_area";
     $sql_count_result = mysqli_query($con,$sql_count);
     while($interuptor = mysqli_fetch_array($sql_count_result)){
         $id_lampara = $interuptor["id_lampara"];
         $descripcion = $interuptor["descripcion"];
         $status_lampara = $interuptor["status_lamparas"];
-        $control_manual = $interuptor["control_manual"];
+        $control_manual = $interuptor["control_manual_lampara"];
         $direccion_ip = $interuptor["direccion_ip"];
         $array = array(intval($id_area),intval($id_lampara));
         ?>

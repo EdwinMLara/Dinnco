@@ -20,8 +20,10 @@ function actualizar_estado_base_datos(status,id){
  */
 function actualizar_status_bottons(id,status){
  var aux_id = "#input_"+id;
- if(status){
+ if(parseInt(status)){
    $(aux_id).removeClass("button_grey");
+ }else{
+   $(aux_id).addClass("button_grey");
  }
 }
 
@@ -33,11 +35,16 @@ function current_status_system(id_area){
     data:{id_area: id_area},
     success: function(datos){
         var Area = datos;
-        if(parseInt(Area.control_manual)){
-          $("#sistema").addClass("div_disable");
+        if(parseInt(Area.control_calendario)){
+          $("#botones").addClass("div_disable");
         }else{
-          console.log("continuamos");
+          $("#botones").removeClass("div_disable");
         }
+        $("#botones").data('control_manual',Area.control_manual);
+        var aux_lamparas = Area.lamparas;
+        aux_lamparas.forEach(element => {
+          actualizar_status_bottons(element.id_lampara,element.status_lampara);
+        });
     }
   });
 }
@@ -147,12 +154,32 @@ function hacer_peticion_http(url){
 
 }
 
+function update_status_calendario(control_calendario,id_area){
+  $.ajax({
+    type:"Get",
+    dataType:"json",
+    url:"update_status_calendario.php",
+    data:{control_calendario: control_calendario, id_area: id_area},
+    success: function(mensaje){
+        var status = mensaje.status;
+        console.log(status);
+    }
+  });
+}
+
+/**hay que hacer dinamico el 4 que es id del area o seccion**/
+
 $("#Prueba").on('click',function(e){
-  var url
+  var url;
+  var direccion_ip = $(this).data("direccion_ip");
   if($(this).hasClass("btn-warning")){
-    url = "http://192.168.0.9/control_off";
+    url = "http://"+direccion_ip+"/control_off";
+    update_status_calendario(0,4);
+    $(this).html('Control calendario desactivado');
   }else{
-    url = "http://192.168.0.9/control_on";
+    url = "http://"+direccion_ip+"/control_on";
+    update_status_calendario(1,4);
+    $(this).html('Control calendario activado');
   }
 
   console.log(url);
@@ -162,8 +189,10 @@ $("#Prueba").on('click',function(e){
 });
 
 $( ".button_red" ).on('click',function(e) {
+  
   var control_manual = $(this).data("control_manual");
   console.log(control_manual);
+
   if(control_manual){
     alert('desative el control manual');
   }else{
