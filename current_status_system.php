@@ -1,8 +1,8 @@
 <?php
 	require_once("conexion.php");
-	include "Area.php";
-	include "Lampara.php";
-	include "Evento.php";
+	include "Clases/Area.php";
+	include "Clases/Lampara.php";
+	include "Clases/Evento.php";
 
 	
 	if($con){

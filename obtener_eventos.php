@@ -1,6 +1,6 @@
 <?php
 	require_once("conexion.php");
-	include "Evento.php";
+	include "Clases/Evento.php";
 	$array = array();
 	if(isset($_GET["id_lampara"])){
 		$id_lampara = $_GET["id_lampara"]; 

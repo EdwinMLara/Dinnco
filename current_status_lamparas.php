@@ -1,6 +1,6 @@
 <?php
 	require_once("conexion.php");
-	include "Lampara.php";
+	include "Clases/Lampara.php";
 	$inicio = $_GET["inicio"];
 	$fin = $_GET["fin"];
 	if($con){

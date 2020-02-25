@@ -1,7 +1,7 @@
 <?php
 require_once("conexion.php");
-include "Evento.php";
-include "Lampara.php";
+include "Clases/Evento.php";
+include "Clases/Lampara.php";
 
 $celda_msj_status = new stdClass();
 
